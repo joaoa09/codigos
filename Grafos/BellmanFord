@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+
+const int MAXN = 5010;
+const int INF = 1e18;
+
+vector<tuple<int,int,int>> arestas; // Guarda {u, v, peso}
+int dist[MAXN], pai[MAXN];
+
+// Roda o algoritmo. Retorna TRUE se achou ciclo negativo, FALSE se não achou.
+bool bellman_ford(int n, int start, vector<int>& ciclo) {
+    for(int i = 0; i <= n; i++) {
+        dist[i] = INF;
+        pai[i] = 0;
+    }
+    
+    dist[start] = 0;
+    int x = -1; // Guarda o último nó atualizado
+    
+    // Roda N vezes. A N-ésima vez só serve para detectar o ciclo.
+    for(int i = 0; i < n; i++) {
+        x = -1;
+        for(auto [u, v, peso] : arestas) {
+            if(dist[u] < INF && dist[u] + peso < dist[v]) {
+                dist[v] = dist[u] + peso;
+                pai[v] = u;
+                x = v;
+            }
+        }
+    }
+
+    if(x == -1) return false; // Sem ciclo negativo
+
+    // Reconstrução do Ciclo Negativo
+    for(int i = 0; i < n; i++) x = pai[x]; // Garante que X está dentro do ciclo
+    
+    int v = x;
+    while(true) {
+        ciclo.push_back(v);
+        if(v == x && ciclo.size() > 1) break;
+        v = pai[v];
+    }
+    reverse(ciclo.begin(), ciclo.end());
+    
+    return true;
+}
+
+int32_t main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n, m;
+    if (!(cin >> n >> m)) return 0;
+
+    for(int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        arestas.push_back({u, v, w});
+    }
+
+    vector<int> ciclo;
+    // Iniciamos do nó 1 (ajuste conforme o problema)
+    if(bellman_ford(n, 1, ciclo)) {
+        cout << "YES\n";
+        for(int v : ciclo) cout << v << " ";
+        cout << "\n";
+    } else {
+        cout << "NO\n";
+    }
+
+    return 0;
+}
