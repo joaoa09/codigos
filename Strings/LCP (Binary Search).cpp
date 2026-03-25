@@ -69,5 +69,38 @@ int32_t main(){
     i é o começo da primeira (0) e j é o começo da segunda (s1.size()+1)
     */
 
+    /* DICA: Para comparar lexicograficamente duas substrings, ache o LCP entre elas.
+    O primeiro caractere diferente (LCP + 1) define qual string eh maior.
+    */
+
+    // --- CONTINUANDO PARA UMA QUESTAO PADRAO DE LCP E COMPARACAO ---
+
+    int q;
+    if (!(cin >> q)) return 0; // Le a quantidade de queries
+
+    while(q--) {
+        int i, j;
+        cin >> i >> j; // Le os indices iniciais dos dois sufixos
+
+        int lcp_val = get_lcp(i, j, n);
+        cout << "LCP: " << lcp_val << " | ";
+
+        // LOGICA DE COMPARACAO LEXICOGRAFICA:
+        // Se o LCP for igual ao tamanho do menor sufixo, a menor string e um prefixo da maior
+        if (i + lcp_val == n || j + lcp_val == n) {
+            if (i == j) cout << "Sufixos sao identicos\n";
+            else if (n - i < n - j) cout << "Sufixo " << i << " e menor (prefixo)\n";
+            else cout << "Sufixo " << j << " e menor (prefixo)\n";
+        } 
+        else {
+            // O caractere logo apos o LCP e o que define quem vem antes no dicionario
+            if (s[i + lcp_val] < s[j + lcp_val]) {
+                cout << "Sufixo " << i << " e menor lexicograficamente\n";
+            } else {
+                cout << "Sufixo " << j << " e menor lexicograficamente\n";
+            }
+        }
+    }
+
     return 0;
 }
