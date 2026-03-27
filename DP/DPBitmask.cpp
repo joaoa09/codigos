@@ -62,3 +62,65 @@ int32_t main(){
 
     return 0;
 }
+
+
+
+
+#include <bits/stdc++.h>
+#define INF 0x3f3f3f3f
+#define int long long
+using namespace std;
+
+int32_t main(){
+
+    int N;
+    cin>>N;
+
+    vector<int> dp(8,INF);
+
+
+    int custos[N];
+    string vitaminas[N];
+
+    for(int i=0;i<N;i++){
+
+        cin>>custos[i];
+        cin>>vitaminas[i];
+
+    }
+
+
+
+    dp[0]=0;
+
+    for(int i=0;i<N;i++){
+
+        int mask=0;
+
+        for(char v:vitaminas[i]){
+
+            if(v=='A') mask|=1;
+            if(v=='B') mask|=2;
+            if(v=='C') mask|=4;
+
+        }
+
+            for(int j=0;j<(1<<3);j++){
+
+                int x=j|mask;
+                dp[x]=min(dp[x],dp[j]+custos[i]);
+
+            }
+
+    }
+
+
+
+    if(dp[7]==INF) cout<<-1;
+
+    else cout<<dp[7];
+
+
+
+
+}
