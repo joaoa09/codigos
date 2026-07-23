@@ -28,12 +28,7 @@ ll dist[MAXN];
 ll custo[MAXN][MAXN];
 
 //-cost na aresta de volta
-void add_edge(int u, int v, ll cap,ll cost){
-
-    adj[u].push_back({v,cap,0,cost,(int)adj[v].size()});
-    adj[v].push_back({u,cap,0,-cost,(int)adj[u].size()-1});
-}
-
+//se for bidirecional, chama add_edge_uni duas vezes, uma pra ida e outra pra volta.
 void add_edge_uni(int u, int v, ll cap,ll cost){
 
     adj[u].push_back({v,cap,0,cost,(int)adj[v].size()});
